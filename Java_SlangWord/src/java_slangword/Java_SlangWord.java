@@ -16,6 +16,8 @@ public class Java_SlangWord {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        SlangWord form = new SlangWord();
+        form.show();
     }
     
 }
