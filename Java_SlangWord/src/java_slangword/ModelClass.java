@@ -12,4 +12,5 @@ package java_slangword;
 public class ModelClass {
     public int STT;
     public String Slang;
+    public String Meaning;
 }
