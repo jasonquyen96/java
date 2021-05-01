@@ -10,7 +10,6 @@ package java_slangword;
  * @author Admin
  */
 public class ModelClass {
-    public int STT;
     public String Slang;
     public String Meaning;
 }
