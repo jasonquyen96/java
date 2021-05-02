@@ -10,7 +10,8 @@ package java_slangword;
  * @author ASUS
  */
 public class DSSLANGWORD extends javax.swing.JFrame {
-
+    SlangExtension ext;
+    
     /**
      * Creates new form DSSLANGWORD
      */
@@ -131,6 +132,7 @@ public class DSSLANGWORD extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new DSSLANGWORD().setVisible(true);
+                String data[][] = ext.getData();
             }
         });
     }

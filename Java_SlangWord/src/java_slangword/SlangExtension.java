@@ -6,14 +6,13 @@
 package java_slangword;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.ObjectInputStream;
+import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -21,16 +20,16 @@ import java.util.Set;
  *
  * @author Admin
  */
-public class ReadData {
+public class SlangExtension {
 
     private HashMap<String, List<String>> map = new HashMap<>();
     private static SlangWord obj = new SlangWord();
     private int sizeMap;
-    private String FILE_SLANGWORD = "slangword.txt";
-    private String FILE_ORIGINAL_SLANGWORD = "slangword-goc.txt";
+    private String FILE_SLANGWORD = "slang.txt";
+    private String FILE_ORIGINAL_SLANGWORD = "slang-goc.txt";
     private String FILE_HISTORY = "history.txt";
 
-    private SlangWord() {
+    private SlangExtension() {
         try {
             String current = new java.io.File(".").getCanonicalPath();
             System.out.println("Current dir:" + current);
@@ -39,7 +38,6 @@ public class ReadData {
             FILE_HISTORY = current + "\\" + FILE_HISTORY;
             readFile(FILE_SLANGWORD);
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
@@ -64,12 +62,10 @@ public class ReadData {
                 }
                 stringBuilder.append("\n");
             }
-            // System.out.println(stringBuilder.toString());
             printWriter.write(stringBuilder.toString());
             printWriter.close();
 
         } catch (Exception e) {
-            // TODO: handle exception
             System.out.println(e);
         }
     }
@@ -104,7 +100,6 @@ public class ReadData {
             } else {
                 meaning.add(part[0]);
             }
-            // map.put(slag.trim(), meaning);
             map.put(slag, meaning);
             i++;
             sizeMap++;
@@ -116,7 +111,7 @@ public class ReadData {
         if (obj == null) {
             synchronized (SlangWord.class) {
                 if (obj == null) {
-                    obj = new SlangWord();// instance will be created at request time
+                    obj = new SlangWord();
                 }
             }
         }
@@ -173,7 +168,6 @@ public class ReadData {
     }
 
     public void saveHistory(String slag, String meaning) throws Exception {
-        // String file = "history.txt";
         File file1 = new File(FILE_HISTORY);
         FileWriter fr = new FileWriter(file1, true);
         fr.write(slag + "`" + meaning + "\n");
@@ -198,7 +192,6 @@ public class ReadData {
             }
             scanner.close();
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         int size = historySlag.size();
@@ -212,7 +205,6 @@ public class ReadData {
     }
 
     public String[][] findDefinition(String query) {
-        // Get all slang contain key
         List<String> keyList = new ArrayList<>();
         List<String> meaningList = new ArrayList<>();
         for (Entry<String, List<String>> entry : map.entrySet()) {
@@ -240,7 +232,6 @@ public class ReadData {
             readFile(FILE_ORIGINAL_SLANGWORD);
             this.saveFile(FILE_SLANGWORD);
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
@@ -291,15 +282,12 @@ public class ReadData {
     }
 
     public String[] random() {
-        // Random a number
         int minimun = 0;
         int maximun = map.size() - 1;
         int rand = randInt(minimun, maximun);
-        // Get slang meaning
         String s[] = new String[2];
         int index = 0;
         for (String key : map.keySet()) {
-            // System.out.println(key);
             if (index == rand) {
                 s[0] = key;
                 s[1] = map.get(key).get(0);
@@ -317,7 +305,6 @@ public class ReadData {
     public String[] quiz(int type) {
         String s[] = new String[6];
         if (type == 1) {
-            // Random a number
             String[] slangRandom = this.random();
             s[0] = slangRandom[0];
             int rand = randInt(1, 4);
@@ -335,7 +322,6 @@ public class ReadData {
                 }
             }
         } else {
-            // Random a number
             String[] slangRandom = this.random();
             s[0] = slangRandom[1];
             int rand = randInt(1, 4);
