@@ -10,13 +10,17 @@ package java_slangword;
  * @author ASUS
  */
 public class DSSLANGWORD extends javax.swing.JFrame {
+
     SlangExtension ext;
-    
+    String dataCopy[][];
+
     /**
      * Creates new form DSSLANGWORD
      */
     public DSSLANGWORD() {
         initComponents();
+        String data[][] = ext.getData();
+        dataCopy = ext.getData();
     }
 
     /**
@@ -132,9 +136,9 @@ public class DSSLANGWORD extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new DSSLANGWORD().setVisible(true);
-                String data[][] = ext.getData();
             }
         });
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
