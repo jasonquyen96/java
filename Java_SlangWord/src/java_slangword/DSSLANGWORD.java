@@ -5,8 +5,14 @@
  */
 package java_slangword;
 
+import java.awt.Color;
+import java.awt.Component;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 
 /**
  *
@@ -23,20 +29,28 @@ public class DSSLANGWORD extends javax.swing.JFrame {
     public DSSLANGWORD() {
         initComponents();
         ext = SlangExtension.getInstance();
-        LoadData();
+        dataCopy = ext.getData();
+        LoadData(dataCopy);
     }
 
-    private void LoadData() {
-        String data[][] = ext.getData();
-        dataCopy = ext.getData();
-        String column[] = { "STT", "Slag", "Meaning" };
+    private void LoadData(String data[][]) {
+        String column[] = {"STT", "Slag", "Meaning"};
         DefaultTableModel model = new DefaultTableModel();
         model = new DefaultTableModel(data, column);
         jTable1.setModel(model);
         jTable1.setEnabled(false);
-//        String column[] = {"STT", "Slag", "Meaning"};
-//        jTable1 = new JTable(data, column);
-//        jTable1.setRowHeight(30);
+        JTableHeader header = jTable1.getTableHeader();
+        header.setBackground(Color.CYAN);
+        header.setForeground(Color.RED);
+        jTable1.setRowHeight(30);
+        jTable1.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+        TableColumnModel tcm = jTable1.getColumnModel();
+        tcm.getColumn(0).setPreferredWidth(50);     //STT
+        tcm.getColumn(1).setPreferredWidth(100);    //Slag
+        tcm.getColumn(2).setPreferredWidth(400);    //Meaning
+        //String column[] = {"STT", "Slag", "Meaning"};
+        //jTable1 = new JTable(data, column);
+        //jTable1.setRowHeight(30);
     }
 
     /**
@@ -51,6 +65,10 @@ public class DSSLANGWORD extends javax.swing.JFrame {
         jlblTitle = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        jtxtSearch = new javax.swing.JTextField();
+        cboSearchProject = new javax.swing.JComboBox();
+        btnSearch = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("DANH SÁCH SLANG WORD MENU");
@@ -91,37 +109,102 @@ public class DSSLANGWORD extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        jTable1.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
         jTable1.setRowHeight(20);
         jTable1.getTableHeader().setResizingAllowed(false);
         jScrollPane1.setViewportView(jTable1);
+
+        cboSearchProject.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Tìm kiếm theo slang word", "Tìm kiếm theo definition" }));
+        cboSearchProject.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cboSearchProjectActionPerformed(evt);
+            }
+        });
+
+        btnSearch.setText("Tìm kiếm");
+        btnSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setText("Tiêu chí tìm kiếm");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
+                        .addContainerGap(17, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 527, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGap(57, 57, 57)
-                        .addComponent(jlblTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 412, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(40, 40, 40)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(42, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(cboSearchProject, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addGap(54, 54, 54))
+                                    .addComponent(jlblTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 412, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(jtxtSearch)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addGap(18, 18, 18))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jlblTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 317, Short.MAX_VALUE)
-                .addGap(23, 23, 23))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cboSearchProject, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jtxtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSearch))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+        String dataSearch[][] = null;
+        if (jtxtSearch.getText().equals("")) {
+            dataSearch = dataCopy;
+        } else {
+            if (cboSearchProject.getSelectedIndex() == 0) {
+                dataSearch = ext.getMeaning(jtxtSearch.getText());
+
+            } else {
+                dataSearch = ext.findDefinition(jtxtSearch.getText());
+            }
+
+            try {
+                for (String[] dataSearch1 : dataSearch) {
+                    ext.saveHistory(dataSearch1[1], dataSearch1[2]);
+                }
+            } catch (Exception e1) {
+            }
+        }
+
+        LoadData(dataSearch);
+    }//GEN-LAST:event_btnSearchActionPerformed
+
+    private void cboSearchProjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboSearchProjectActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cboSearchProjectActionPerformed
 
     /**
      * @param args the command line arguments
@@ -160,8 +243,12 @@ public class DSSLANGWORD extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnSearch;
+    private javax.swing.JComboBox cboSearchProject;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JLabel jlblTitle;
+    private javax.swing.JTextField jtxtSearch;
     // End of variables declaration//GEN-END:variables
 }
