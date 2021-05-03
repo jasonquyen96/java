@@ -32,7 +32,6 @@ public class SlangExtension {
     private SlangExtension() {
         try {
             String current = new java.io.File(".").getCanonicalPath();
-            System.out.println("Current dir:" + current);
             FILE_SLANGWORD = current + "\\" + FILE_SLANGWORD;
             FILE_ORIGINAL_SLANGWORD = current + "\\" + FILE_ORIGINAL_SLANGWORD;
             FILE_HISTORY = current + "\\" + FILE_HISTORY;
@@ -89,11 +88,7 @@ public class SlangExtension {
                 meaning = map.get(slag);
             }
             if (part[0].contains("|")) {
-                System.out.println(part[0]);
                 String[] d = (part[0]).split("\\|");
-                for (int ii = 0; ii < d.length; ii++) {
-                    System.out.println(d[ii]);
-                }
                 Collections.addAll(meaning, d);
                 sizeMap += d.length - 1;
             } else {
@@ -127,7 +122,6 @@ public class SlangExtension {
             s[i][1] = (String) slagList[index];
             List<String> meaning = map.get(slagList[index]);
             s[i][2] = meaning.get(0);
-            System.out.println(s[i][0] + "\t" + s[i][1] + "\t" + s[i][2]);
             for (int j = 1; j < meaning.size(); j++) {
                 if (i < sizeMap) {
                     i++;
@@ -135,14 +129,13 @@ public class SlangExtension {
                 s[i][0] = String.valueOf(i);
                 s[i][1] = (String) slagList[index];
                 s[i][2] = meaning.get(j);
-                System.out.println(s[i][0] + "\t" + s[i][1] + "\t" + s[i][2]);
             }
             index++;
         }
         return s;
     }
 
-    public String[][] getMeaning(String key) {
+    public String[][] findSlangword(String key) {
         List<String> listMeaning = map.get(key);
         if (listMeaning == null) {
             return null;
@@ -158,12 +151,10 @@ public class SlangExtension {
     }
 
     public void set(String slag, String oldValue, String newValue) {
-        System.out.println(oldValue + "\t" + newValue);
         List<String> meaning = map.get(slag);
         int index = meaning.indexOf(oldValue);
         meaning.set(index, newValue);
         this.saveFile(FILE_SLANGWORD);
-        System.out.println("Size of map: " + sizeMap);
     }
 
     public void saveHistory(String slag, String meaning) throws Exception {
@@ -301,41 +292,46 @@ public class SlangExtension {
         return (minimum + (int) (Math.random() * maximum));
     }
 
-    public String[] quiz(int type) {
+    public String[] layCauHoiSlangWord() {
         String s[] = new String[6];
-        if (type == 1) {
-            String[] slangRandom = this.random();
-            s[0] = slangRandom[0];
-            int rand = randInt(1, 4);
-            s[rand] = slangRandom[1];
-            s[5] = slangRandom[1];
-            for (int i = 1; i <= 4; i++) {
-                if (rand == i) {
-                    continue;
-                } else {
-                    String[] slangRand = this.random();
-                    while (slangRand[0] == s[0]) {
-                        slangRand = this.random();
-                    }
-                    s[i] = slangRand[1];
+
+        String[] slangRandom = this.random();
+        s[0] = slangRandom[0];
+        int rand = randInt(1, 4);
+        s[rand] = slangRandom[1];
+        s[5] = slangRandom[1];
+        for (int i = 1; i <= 4; i++) {
+            if (rand == i) {
+                continue;
+            } else {
+                String[] slangRand = this.random();
+                while (slangRand[0] == s[0]) {
+                    slangRand = this.random();
                 }
+                s[i] = slangRand[1];
             }
-        } else {
-            String[] slangRandom = this.random();
-            s[0] = slangRandom[1];
-            int rand = randInt(1, 4);
-            s[rand] = slangRandom[0];
-            s[5] = slangRandom[0];
-            for (int i = 1; i <= 4; i++) {
-                if (rand == i) {
-                    continue;
-                } else {
-                    String[] slangRand = this.random();
-                    while (slangRand[0] == s[0]) {
-                        slangRand = this.random();
-                    }
-                    s[i] = slangRand[0];
+        }
+
+        return s;
+    }
+
+    public String[] layCauHoiDefinition() {
+        String s[] = new String[6];
+
+        String[] slangRandom = this.random();
+        s[0] = slangRandom[1];
+        int rand = randInt(1, 4);
+        s[rand] = slangRandom[0];
+        s[5] = slangRandom[0];
+        for (int i = 1; i <= 4; i++) {
+            if (rand == i) {
+                continue;
+            } else {
+                String[] slangRand = this.random();
+                while (slangRand[0] == s[0]) {
+                    slangRand = this.random();
                 }
+                s[i] = slangRand[0];
             }
         }
 

@@ -6,12 +6,18 @@
 package java_slangword;
 
 import java.awt.Color;
-import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
 /**
@@ -21,7 +27,6 @@ import javax.swing.table.TableColumnModel;
 public class DSSLANGWORD extends javax.swing.JFrame {
 
     SlangExtension ext;
-    String dataCopy[][];
 
     /**
      * Creates new form DSSLANGWORD
@@ -29,12 +34,35 @@ public class DSSLANGWORD extends javax.swing.JFrame {
     public DSSLANGWORD() {
         initComponents();
         ext = SlangExtension.getInstance();
-        dataCopy = ext.getData();
-        LoadData(dataCopy);
+        btnSearchActionPerformed(null);
+
+        jTable1.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                int r = jTable1.rowAtPoint(e.getPoint());
+                if (r >= 0 && r < jTable1.getRowCount()) {
+                    jTable1.setRowSelectionInterval(r, r);
+                } else {
+                    jTable1.clearSelection();
+                }
+
+                //row index is found...
+                int rowindex = jTable1.getSelectedRow();
+                if (rowindex < 0) {
+                    return;
+                }
+                if (e.isPopupTrigger() && e.getComponent() instanceof JTable) {
+                    JPopupMenu popup = createYourPopUp(jTable1.getValueAt(rowindex, 1).toString(),
+                            jTable1.getValueAt(rowindex, 2).toString());
+                    popup.show(e.getComponent(), e.getX(), e.getY());
+                }
+            }
+
+        });
     }
 
     private void LoadData(String data[][]) {
-        String column[] = {"STT", "Slag", "Meaning"};
+        String column[] = {"STT", "Slang word", "Definition"};
         DefaultTableModel model = new DefaultTableModel();
         model = new DefaultTableModel(data, column);
         jTable1.setModel(model);
@@ -47,10 +75,47 @@ public class DSSLANGWORD extends javax.swing.JFrame {
         TableColumnModel tcm = jTable1.getColumnModel();
         tcm.getColumn(0).setPreferredWidth(50);     //STT
         tcm.getColumn(1).setPreferredWidth(100);    //Slag
-        tcm.getColumn(2).setPreferredWidth(400);    //Meaning
-        //String column[] = {"STT", "Slag", "Meaning"};
+        tcm.getColumn(2).setPreferredWidth(400);    //Definition
+        //String column[] = {"STT", "Slag", "Definition"};
         //jTable1 = new JTable(data, column);
         //jTable1.setRowHeight(30);
+    }
+
+    public JPopupMenu createYourPopUp(String key, String value) {
+        JPopupMenu popup = new JPopupMenu();
+        JMenuItem edit = new JMenuItem("Edit");
+        JMenuItem delete = new JMenuItem("Delete");
+        edit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // TODO Auto-generated method stub
+                EditWordFrame form = new EditWordFrame(key, value);
+                form.addWindowListener(new WindowAdapter() {
+                    @Override
+                    public void windowClosed(WindowEvent e) {
+                        btnSearchActionPerformed(null);
+                    }
+                });
+                form.show();       
+            }
+        });
+        delete.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // TODO Auto-generated method stub
+                int n = JOptionPane.showConfirmDialog(null, "Bạn có chắc chắn xóa slang word?", "Xác nhận",
+                        JOptionPane.YES_NO_OPTION);
+                if (n == 0) {
+                    ext.delete(key, value);
+                    // default title and icon
+                    btnSearchActionPerformed(null);
+                    JOptionPane.showMessageDialog(null, "Delete Thành Công");
+                }
+            }
+        });
+        popup.add(edit);
+        popup.add(delete);
+        return popup;
     }
 
     /**
@@ -69,10 +134,12 @@ public class DSSLANGWORD extends javax.swing.JFrame {
         cboSearchProject = new javax.swing.JComboBox();
         btnSearch = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        btnAdd = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("DANH SÁCH SLANG WORD MENU");
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        setResizable(false);
 
         jlblTitle.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jlblTitle.setForeground(new java.awt.Color(255, 0, 51));
@@ -98,7 +165,7 @@ public class DSSLANGWORD extends javax.swing.JFrame {
                 {null, null, null}
             },
             new String [] {
-                "STT", "Slag", "Meaning"
+                "STT", "Slag", "Definition"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -130,15 +197,19 @@ public class DSSLANGWORD extends javax.swing.JFrame {
 
         jLabel1.setText("Tiêu chí tìm kiếm");
 
+        btnAdd.setText("Thêm mới");
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap(17, Short.MAX_VALUE)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 527, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGap(57, 57, 57)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -154,7 +225,12 @@ public class DSSLANGWORD extends javax.swing.JFrame {
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(jtxtSearch)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap(17, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 527, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnAdd))))
                 .addGap(18, 18, 18))
         );
         layout.setVerticalGroup(
@@ -170,8 +246,10 @@ public class DSSLANGWORD extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jtxtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnSearch))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnAdd)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 303, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -182,10 +260,10 @@ public class DSSLANGWORD extends javax.swing.JFrame {
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
         String dataSearch[][] = null;
         if (jtxtSearch.getText().equals("")) {
-            dataSearch = dataCopy;
+            dataSearch = ext.getData();
         } else {
             if (cboSearchProject.getSelectedIndex() == 0) {
-                dataSearch = ext.getMeaning(jtxtSearch.getText());
+                dataSearch = ext.findSlangword(jtxtSearch.getText());
 
             } else {
                 dataSearch = ext.findDefinition(jtxtSearch.getText());
@@ -205,6 +283,13 @@ public class DSSLANGWORD extends javax.swing.JFrame {
     private void cboSearchProjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboSearchProjectActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cboSearchProjectActionPerformed
+
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+        // TODO add your handling code here:
+        AddWordFrame form = new AddWordFrame();
+        form.show();
+        btnSearchActionPerformed(null);
+    }//GEN-LAST:event_btnAddActionPerformed
 
     /**
      * @param args the command line arguments
@@ -243,6 +328,7 @@ public class DSSLANGWORD extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnSearch;
     private javax.swing.JComboBox cboSearchProject;
     private javax.swing.JLabel jLabel1;

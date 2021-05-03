@@ -5,8 +5,11 @@
         <group>
             <file>file:/D:/Project/Java/java/Java_SlangWord/src/java_slangword/Java_SlangWord.java</file>
             <file>file:/D:/Project/Java/java/Java_SlangWord/src/java_slangword/EditWordFrame.java</file>
+            <file>file:/D:/Project/Java/java/Java_SlangWord/src/java_slangword/AddWordFrame.java</file>
             <file>file:/D:/Project/Java/java/Java_SlangWord/src/java_slangword/SlangWord.java</file>
-            <file>file:/D:/Project/Java/java/Java_SlangWord/src/java_slangword/ModelClass.java</file>
+            <file>file:/D:/Project/Java/java/Java_SlangWord/src/java_slangword/RandomWordFrame.java</file>
+            <file>file:/D:/Project/Java/java/Java_SlangWord/src/java_slangword/DoVuiSlangwordFrame.java</file>
+            <file>file:/D:/Project/Java/java/Java_SlangWord/src/java_slangword/HistoryWordFrame.java</file>
             <file>file:/D:/Project/Java/java/Java_SlangWord/src/java_slangword/SlangExtension.java</file>
             <file>file:/D:/Project/Java/java/Java_SlangWord/src/java_slangword/DSSLANGWORD.java</file>
         </group>
