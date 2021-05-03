@@ -96,7 +96,7 @@ public class DSSLANGWORD extends javax.swing.JFrame {
                         btnSearchActionPerformed(null);
                     }
                 });
-                form.show();       
+                form.show();
             }
         });
         delete.addActionListener(new ActionListener() {
@@ -287,8 +287,13 @@ public class DSSLANGWORD extends javax.swing.JFrame {
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         // TODO add your handling code here:
         AddWordFrame form = new AddWordFrame();
+        form.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                btnSearchActionPerformed(null);
+            }
+        });
         form.show();
-        btnSearchActionPerformed(null);
     }//GEN-LAST:event_btnAddActionPerformed
 
     /**
