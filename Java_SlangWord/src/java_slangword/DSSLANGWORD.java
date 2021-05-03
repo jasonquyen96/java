@@ -5,6 +5,9 @@
  */
 package java_slangword;
 
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author ASUS
@@ -19,8 +22,21 @@ public class DSSLANGWORD extends javax.swing.JFrame {
      */
     public DSSLANGWORD() {
         initComponents();
+        ext = SlangExtension.getInstance();
+        LoadData();
+    }
+
+    private void LoadData() {
         String data[][] = ext.getData();
         dataCopy = ext.getData();
+        String column[] = { "STT", "Slag", "Meaning" };
+        DefaultTableModel model = new DefaultTableModel();
+        model = new DefaultTableModel(data, column);
+        jTable1.setModel(model);
+        jTable1.setEnabled(false);
+//        String column[] = {"STT", "Slag", "Meaning"};
+//        jTable1 = new JTable(data, column);
+//        jTable1.setRowHeight(30);
     }
 
     /**
@@ -38,6 +54,7 @@ public class DSSLANGWORD extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("DANH SÁCH SLANG WORD MENU");
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         jlblTitle.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jlblTitle.setForeground(new java.awt.Color(255, 0, 51));
@@ -103,6 +120,7 @@ public class DSSLANGWORD extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     /**

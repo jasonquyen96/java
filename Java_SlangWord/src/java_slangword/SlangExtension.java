@@ -10,11 +10,11 @@ import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.TreeMap;
 
 /**
  *
@@ -22,8 +22,8 @@ import java.util.Set;
  */
 public class SlangExtension {
 
-    private HashMap<String, List<String>> map = new HashMap<>();
-    private static SlangWord obj = new SlangWord();
+    private TreeMap<String, List<String>> map = new TreeMap<>();
+    private static SlangExtension obj = new SlangExtension();
     private int sizeMap;
     private String FILE_SLANGWORD = "slang.txt";
     private String FILE_ORIGINAL_SLANGWORD = "slang-goc.txt";
@@ -79,7 +79,6 @@ public class SlangExtension {
         String temp = scanner.next();
         String[] part = temp.split("\n");
         int i = 0;
-        int flag = 0;
         sizeMap = 0;
         while (scanner.hasNext()) {
             List<String> meaning = new ArrayList<String>();
@@ -107,11 +106,11 @@ public class SlangExtension {
         scanner.close();
     }
 
-    public static SlangWord getInstance() {
+    public static SlangExtension getInstance() {
         if (obj == null) {
-            synchronized (SlangWord.class) {
+            synchronized (SlangExtension.class) {
                 if (obj == null) {
-                    obj = new SlangWord();
+                    obj = new SlangExtension();
                 }
             }
         }
